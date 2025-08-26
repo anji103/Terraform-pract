@@ -9,4 +9,7 @@ resource "aws_instance" "ec2_example" {
   provisioner "local-exec" {
     command = "touch hello-jhooq.txt"
   }
+  provisioner "local-exec" {
+    command = "echo ${self.public_ip} >> ip_list.txt"
+  }
 }
