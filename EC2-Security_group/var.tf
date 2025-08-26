@@ -75,3 +75,7 @@ variable "myaz" {
   type        = string
   default     = "ap-south-1a"
 }
+variable "sg"{
+  type = list(string)
+  default = ["sg-0bcf2b40819d8e19b"]
+}

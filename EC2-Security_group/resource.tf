@@ -29,7 +29,7 @@ resource "aws_instance" "myinstance" {
   instance_type          = var.myinstype
   key_name               = var.key_name
   availability_zone      = var.myaz
-  security_group_ids     = [aws_security_group.mysg.id]  # Attach security group to EC2
+  vpc_security_group_ids = var.sg  # Attach security group to EC2
 
   tags = {
     Name = "My EC2 Instance"
