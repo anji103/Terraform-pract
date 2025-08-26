@@ -14,6 +14,15 @@ resource "aws_instance" "ec2_example" {
       "echo helloworld remote provisioner >> hello.txt",
     ]
   }
+    provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install -y nginx",
+      "sudo systemctl start nginx",
+      "sudo systemctl enable nginx"
+    ]
+  }
+  
   connection {
 		type        = "ssh"
 		host        = self.public_ip
