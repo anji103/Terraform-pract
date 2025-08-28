@@ -1,1 +1,55 @@
 ssh-keygen -t rsa -b 2048
+
+
+locals {
+   ingress_rules = [{
+      port        = 443
+      description = "Ingress rules for port 443"
+   },
+   {
+      port        = 22
+      description = "Ingree rules for port 22"
+   }]
+}
+
+resource "aws_instance" "ec2_example" {
+
+    ami = "ami-0f918f7e67a3323f0"  
+    instance_type = "t2.micro" 
+    key_name= "aws_key"
+    vpc_security_group_ids = [aws_security_group.main.id]
+}
+
+resource "aws_security_group" "main" {
+  egress = [
+    {
+      cidr_blocks      = [ "0.0.0.0/0", ]
+      description      = ""
+      from_port        = 0
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "-1"
+      security_groups  = []
+      self             = false
+      to_port          = 0
+    }
+  ]
+ dynamic "ingress" {
+      for_each = local.ingress_rules
+
+      content {
+         description = ingress.value.description
+         from_port   = ingress.value.port
+         to_port     = ingress.value.port
+         protocol    = "tcp"
+         cidr_blocks = ["0.0.0.0/0"]
+      }
+   }
+  
+}
+
+
+resource "aws_key_pair" "deployer" {
+  key_name   = "aws_key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDODlwq4Lie6nIJeeKt/A+2EPJAWuvwGTMIVReHqj0k7OyPhxxgfkrC/m4+u3+vB8GOvBXx08uHuOjYJmbLCxIinpLqe43mtqO+9kGs8h/UQfY6Dzss7WYky9SPBbD0qMZ59Ajds+xLoE3LePYwQrVrMJTbMlKVvrJ36NBbrd5A8MgoU7n7q0/VPrj94XUJpT53JKAwXRxzii2opAZ3/FQV1Ma+pCMR6XggB6vyuR/Vq1plXqu0Cd56ahkDzVLZnBnwtddbqKTUGmKmlQWG+4iBVEXCozXzI4j+uSF/AmqN9LV0MzizmW8qvnnMQGYjgXUkomUdoDKNJ84580ZPiTOX"
+}
