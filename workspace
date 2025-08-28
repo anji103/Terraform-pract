@@ -25,3 +25,15 @@ resource "aws_instance" "example" {
   }
 }
 
+
+instance_type  = "t2.medium"
+instance_count = 3
+
+
+
+instance_type  = "t2.micro"
+instance_count = 1
+
+instance_type  = "t2.small"
+instance_count = 2
+
