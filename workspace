@@ -1,0 +1,27 @@
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Variables
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+}
+
+variable "instance_count" {
+  description = "Number of EC2 instances"
+  type        = number
+}
+
+# EC2 resource
+resource "aws_instance" "example" {
+  ami           = "ami-0f918f7e67a3323f0" # Ubuntu AMI (Mumbai)
+  instance_type = var.instance_type
+  count         = var.instance_count
+
+  tags = {
+    Name = "ec2-${terraform.workspace}"
+    Env  = terraform.workspace
+  }
+}
+
